@@ -8,31 +8,31 @@ categories:
 
 # Controllers
 
-We've done some work with views, but they are but one leg of the "Model-View-Controller" paradigm the iOS SDK uses. That sounds really fancy, but it's actually pretty simple.
+ビューについていくつかふれてきましたが、しかしそれは iOS SDK が使用する "Model-View-Controller" パラダイムの 1 つです。MVC は複雑に聞こえますが、実際には非常にシンプルです。
 
-The idea is that in your code you should have three types of classes: views (which yup, you've already seen), models (which represent and handle data), and....controllers.
+それはコードの中に、ビュー (みなさんは既にそれを使いました)、モデル (データを表現し、処理します)、そしてコントローラの 3 種類のクラスを持っているべきという考えです。
 
-So, what are controllers? They're objects which act as a "layer" between models and views, interpreting events from the user to change the models and update the views in response. In a perfectly coded world, when you tap a button the controller intercepts that event, updates a property of the data, and changes the view to reflect the new data.
+それでは、コントローラとは何でしょうか？コントローラはモデルとビューの間の層として動作するオブジェクトで、ユーザからのイベントに応答しモデルの変更やビューの更新を行います。とても良く書かれたコードでは、ボタンをタップしたときに、コントローラはイベントを奪い、データのプロパティを更新し、新しいデータを反映するためにビューを変更します。
 
-That sounds kind of "big picture", but there are some really practical reasons for controllers:
+「全体像」の類いように聞こえますが、コントローラにはいくつか本当に実用的なことがあります。
 
-- **View reuse**. Let's say we have a `PostView` which displays all the information about a `Post` (its content, author, "Likes", etc). We want to use this view on a couple of different screens, such as a main feed and a user's profile feed. To stay reuseable, the `PostView` shouldn't deal with *how* it gets the information; instead, its controller should take care of that and then pass the processed data on to the view.
-- **Presentation management**. Sometimes we want a view to take up the entire screen, other times we want the same thing to appear in a modal box (think iPad vs iPhone). It doesn't make sense to write two identical view classes that differ only in presentation style, so we use the controllers to resize and animate our views accordingly.
+- **ビューの再利用**. 投稿に関する情報 `Post` (投稿内容、投稿者、"Likes" など) をすべて表示する `PostView` を考えてみましょう。メインのフィードやユーザプロフィールフィードなど、異なる画面でこのビューを使用したいです。ビューを再利用できるように維持するため、`PostView` は情報を取得する方法を扱うべきではありません。その代わり、コントローラでそれを処理し、処理されたデータをビューへ渡すべきです。
+- **プレゼンテーションの管理**. 画面全体を取り扱うビューが欲しいときもあれば、同じことをモーダルボックスに表示するものが欲しい場合があります (iPad と iPhone を考えると)。プレゼンテーションのスタイルだけが異なる、まったく同じ 2 つのビュークラスを記述することは賢明ではないので、コントローラを使いビューにあわせてリサイズやアニメーションを行います。
 
-There's nothing technically stopping you from doing those things inside models and views, but it makes your code much more robust and easier to manage if you embrace MVC.
+MVC についてモデルとビューで技術的に難しいことはありません。もしみなさんが MVC を採用すれば、より強固で管理が容易なコードとなることでしょう。
 
-In iOS-land, controllers are `UIViewController`s. They come with one `view` property and methods for dealing with things like the view "lifecycle" and handling orientation changes. Don't fret, we'll get to the lifecycle business soon enough.
+iOS の世界では、コントローラは `UIViewController` です。`UIViewController` には 1 つの `view` プロパティとビューのライフサイクルのようなことを対処するためのメソッドがあり、またデバイスの向きの変更 (横向きから縦向きへ変更など) を対処します。心配しないでください、私たちはすぐにビジネスライフサイクルを得るでしょう。
 
-So now that we know what a controller is and what it should do, what *shouldn't* it do?
+コントローラが何か、それがすべきことが何かを知りました。では、何を*すべきではない*のでしょう？
 
-- Directly query or save data. It's tempting to send a bunch of HTTP requests in a controller, but those are best left to your models.
-- Complex view layouts. If you're directly adding subviews more then one level "deep" to your controller's `view`, you should rewrite your views to do it themselves. As a good rule of thumb, the only `addSubview` you should see in your controller is `self.view.addSubview`.
+- データを直接参照したり、保存すること。コントローラで HTTP リクエストを送信することは魅力的ですが、これらはモデルで行うのがベストです。
+- 複雑なビューレイアウトを扱うこと。もし、コントローラの `view` に 1 つ以上のサブビューを直接追加しているのでしたら、ビューでそれを行うようにビューを書き直すべきです。コントローラに書かれている `addSubview` は `self.view.addSubview` だけというのが、良い経験則です。
 
-OK that's enough exposition, time for the Michael Bay action sequences.
+OK、説明は終わりです。マイケル・ベイ監督がアクションを撮影する時間ですね。
 
 ## Everything Is Under Controllers
 
-Create the `./app/controllers` directory (`mkdir ./app/controllers`) and add a `TapController.rb` file inside. Let's start to define our controller like so:
+`./app/controllers` ディレクトリを作成し (`mkdir ./app/controllers`)、`TapController.rb` ファイルをディレクトリ内に追加します。さぁ、次のようにコントローラを書き始めましょう。
 
 ```ruby
 class TapController < UIViewController
@@ -44,11 +44,11 @@ class TapController < UIViewController
 end
 ```
 
-`viewDidLoad` is one of those "lifecycle" methods of `UIViewController`, which is called after `self.view` has been created and is ready for subviews to be added. For now, we just make it's background color red and call it a day.
+`viewDidLoad` は `UIViewController` のライフサイクルを形作るメソッドの 1 つで、`self.view` で示されるビューが作成され、追加されたサブビューが利用できるようになると呼び出されます。今日のところは、赤い背景色のビューとしておきましょう。
 
-You *absolutely*, *must*, *without question* call `super` in `viewDidLoad`, or else bad things will happen. Got it? Cool.
+皆さんは、絶対に、疑うこと無く、`viewDidLoad` で `super` を呼び出す必要があります。そうでなければ、良くないことが起こるでしょう。分かりました？
 
-Now, go back to your `AppDelegate` and remove our old `UIView` code. We just need to add one line so it looks like this:
+さて、`AppDelegate` へ戻り、以前の `UIView` のコードを削除しましょう。私たちは 1 行追加する必要があり、次のようになります。
 
 ```ruby
 class AppDelegate
@@ -64,17 +64,17 @@ class AppDelegate
 end
 ```
 
-See the `rootViewController=` call? The window will take the given `UIViewController` and adjust its `view`'s size to fits the window. *This* is the better way of setting up your window (as opposed to `window.addSubview` everywhere).
+`rootViewController=` の呼び出しが分かりますか？ window が与えられた `UIViewController` を受け取り、window にフィットするように `view` のサイズを調整します。これは、window をセットアップするための良い方法です(`window.addSubview` とは対照的に)。
 
-The other new part of that line is `initWithNibName:bundle:`. Typically, this is used to load a controller from a `NIB` file. `NIB`s are created using Xcode's Interface Builder as a way of visually constructing your view. Since we aren't using Interface Builder for our controller, we can safely pass nil for both arguments.
+追加した行でほかに新しい部分は `initWithNibName:bundle:` です。一般的に、これは `NIB` ファイルからコントローラを読み込むために使われます。`NIB` は Xcode の Interface Builder を使うことで作られます。私たちのコントローラのためには Interface Builder を使っていないので、2 つの引数の両方に nil を渡すことができます。
 
-`initWithNibName:bundle:` is also the "designated initializer" of `UIViewController`s. Whenever you want to create a controller, you *must* call this method at some point, especially in any customized initializer methods.
+`initWithNibName:bundle:` は `UIViewController` のイニシャライザでもあります。コントローラを作成するたびに、このメソッドを呼び出します。
 
-Since that's out of the way, `rake` and check it out. You should see something like this:
+エディタを邪魔にならないところにどけておいて、`rake` を実行してチェックしてみましょう。次のように表示されます。
 
 ![first controller](images/1.png)
 
-Big things have small beginnings. Let's make one small change to our controller:
+大事は小事より起こります。さぁ、コントローラに小さな変更を行いましょう。
 
 ```ruby
   def viewDidLoad
@@ -90,21 +90,21 @@ Big things have small beginnings. Let's make one small change to our controller:
   end
 ```
 
-A wild `UILabel` appeared! `UILabel`s are views meant for displaying static text with their `text` property. We create one, set its text to "Taps", and add it as a subview.
+ワイルドな `UILabel` が登場です！`UILabel` は `text` プロパティで静的なテキストを表示するためのビューです。テキストに "Taps" を設定し、サブビューとしてそれを追加しています。
 
-We use the `CGRectZero` frame when we initialize it because we don't know the exact dimensions of the text on the screen yet; however, when we call `sizeToFit` the label resizes itself to perfectly fit its contents. Then we use the handy `center` property to center it in our controller's view.
+画面に表示するテキストの正確なサイズがまだ分からないので、`UILabel` を初期化するときに、`CGRectZero` を frame に使います。しかし、`sizeToFit` を呼び出すと、内容に合わせて完全にフィットするようにラベルがリサイズします。そして便利な `center` プロパティを使い、ラベルをコントローラのビューの中央に揃えます。
 
-`rake` again for a much pleasant-looking app. It doesn't really do...anything right now, but in the next chapter we'll make it do...stuff.
+楽しいアプリのために、再び `rake` を実行します。今のところアプリは・・・何もしませんが、それは次の章で。
 
 ![with a label](images/2.png)
 
 ## Wrap Up
 
-What did we learn this time?
+今回、学んだことは何だった？
 
-- The iOS SDK uses the Model-View-Controller paradigm.
-- `UIViewController` makes up the controller part of that, and it should be subclassed for customization.
-- Use `viewDidLoad` when to setup your controller and *don't forget to call *super*.
-- `UIWindow`s have a `rootViewController` property for displaying controllers.
+- iOS SDK は Model-View-Controller を使います。
+- `UIViewController` はコントローラの一部を作成し、カスタマイズのために `UIViewController` のサブクラスを作ります。
+- コントローラをセットアップするときには `viewDidLoad` を使い、*super* を呼び出しておくことを忘れてはいけません。
+- `UIWindow` はコントローラを表示するために `rootViewController` プロパティを持ってます。
 
-[Pole vault up to the next chapter and play with Container Controllers!](/4-containers)
+[次の章へ棒高跳び。Container Controllers で遊ぼう！](/4-containers)
