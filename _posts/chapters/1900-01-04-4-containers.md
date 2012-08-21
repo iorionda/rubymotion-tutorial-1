@@ -8,19 +8,19 @@ categories:
 
 # Containers
 
-Now that we have a big white screen on our hands, let's dress it up.
+さて、私たちは大きな白い画面を手にしました。それをドレスアップしましょう！
 
-If you've used more than a handful of iOS apps, you've undoubtedly noticed some visual similarities. Primarily, many apps have a black bottom bar with tabs and a blue top bar with a title. These are the standard "containers" in iOS, known as `UITabBarController` and `UINavigationController` respectively. We're going to play with them.
+みなさんが iOS アプリをいくつか使ったことがあるのでしたら、いくらか似かよった見た目であることに間違いなく気がつくことでしょう。主に、多くのアプリは下に黒いタブバー、上には青いタイトルバーがあります。これらは iOS での標準的な「コンテナ」で、それぞれ `UITabBarController` と `UINavigationController` と知られています。これから、それらで遊ぶつもりです。
 
-These containers are `UIViewController` subclasses which actually manage other `UIViewController`s. Kind of wild, right? They have a `view` just like regular controllers, to which these "children" controllers' views are added as subviews. Thankfully, we never really have to worry about *how* that works, as these container controllers have pleasant APIs that deal with controllers, not views.
+これらのコンテナは `UIViewController` のサブクラスで、ほかの `UIViewController` を管理します。ワイルドだろ？コンテナは通常のコントローラのように `view` を持っていて、サブビューとして「子」のコントローラのビューが追加されます。ありがたいことに、これらのコンテナコントローラは、ビューでは無くコントローラを処理するために便利な API が用意されているので、私たちは *どのように* 動くか心配する必要がありません。
 
 ## UINavigationController
 
-Let's start with the most common container, `UINavigationController`. It manages its children controllers as a stack, pushing and popping them along a visually horizontal path. Mail.app uses one for its flow from Accounts -> An Account -> Inbox -> Message. The navigation controller is really nice in that automatically it'll handle the back button for you; all you need to do is push and pop controllers.
+最も一般的な `UINavigationController` で始めてみましょう。スタックとして子のコントローラを管理し、見た目には水平方向にプッシュ/ポップが行われます。Mail.app では、Accounts -> An Account -> Inbox -> Message というフローのために `UINavigationController` が使われています。ナビゲーションコントローラは自動的に戻るためのボタンを処理してくれるため本当にすばらしいです。みなさんがしなければいけないのは、コントローラをプッシュ/ポップすることだけです。
 
 ![Navigation controller in Mail.app](images/nav_bar.png)
 
-In `AppDelegate`, change our `rootViewController` assignment to use a `UINavigationController`:
+`AppDelegate` で、`rootViewController` に割り当てていたコントローラを `UINavigationController` を使って変更しましょう。
 
 ```ruby
   ...
@@ -29,9 +29,9 @@ In `AppDelegate`, change our `rootViewController` assignment to use a `UINavigat
   ...
 ```
 
-`initWithRootViewController` will take the controller passed to it and start the stack with it.
+`initWithRootViewController` は指定されたコントローラを受け取り、そのコントローラでスタックを開始します。
 
-And make one more change before we run the app, in `TapController`:
+アプリを実行する前に、`TapController` でもう少し変更を行います。
 
 ```ruby
   ...
@@ -41,15 +41,15 @@ And make one more change before we run the app, in `TapController`:
   ...
 ```
 
-`rake` and check out our slightly prettier app:
+`rake` を実行して、すこしきれいになったアプリを確認してみましょう。
 
 ![Navigation controller](images/1.png)
 
-Sweet. Now let's make it do something. We're going to add a navigation bar button that pushes more instances of `TapController`s onto the navigation controller stack.
+いいねぇ〜。それでは、何か作ってみましょう。ナビゲーションコントローラのスタックに、いくつかの `TapController` インスタンスをプッシュするナビゲーションバーのボタンを追加してみます。
 
-You can actually put buttons in the navigation bar at the top of the screen. For example, Mail.app does this for the "Edit" button. These buttons are instances of `UIBarButtonItem`, which has loads of configuration options (want to use text? an image? a system icon? all sorts of fun stuff).
+画面上部のナビゲーションバーに実際にボタンを配置することができます。たとえば、Mail.app では「編集」ボタンがナビゲーションバーに配置されています。これらのボタンは `UIBarButtonItem` のインスタンスで、いくつかオプションを設定できます(テキストを使用する？画像は？システムアイコンは？などなど)。
 
-In `TapsController`, add the button in `viewDidLoad`:
+`TapsController` の `viewDidLoad` で、ボタンを追加してみましょう。
 
 ```ruby
 def viewDidLoad
@@ -61,11 +61,12 @@ def viewDidLoad
 end
 ```
 
-Should be pretty plain what this does. We create a `UIBarButtonItem` instance with a title and a style. The `style` property determines how our button looks (either plain, bordered, or "done"; play around to see the differences). We then set it as our controller's `navigationItem`'s `rightBarButtonItem`. Every `UIViewController` has a `navigationItem`, which is how we access the information displayed in the blue bar at the top. (NOTE that `UINavigationItem` *isn't* a `UIView`! so you can't arbitrarily add subviews to it).
+これが何をしているのか詳しく見てみましょう。ボタンのタイトルとスタイルを指定して `UIBarButtonItem` を作成します。スタイルプロパティは、ボタンの見た目を決めます(枠線が無いボタン、枠線があるボタン、操作を「完了」するときなどに用いる青いボタン。違いを確認するために遊んでみてください)。次に、ボタンを コントローラの `navigationItem` の `rightBarButtonItem` へ設定します。すべての `UIViewController` には `navigationItem` があり、画面上部の青いバーで表示されている情報へアクセスするための手段となります。
+(注意: `UINavigationItem` は `UIView` ではありません！そのため、サブビューを追加することはできません)。
 
-What's the `target`/`action` business? Well, this is where the original Objective-C SDK leaks into Ruby-land =(. Up until very recently, you couldn't pass anonymous functions as callbacks in Objecive-C; as an alternative, APIs would pass objects and the name of a function to call on that object. We `do` this operation in Ruby with blocks and lambdas, but sadly the older iOS APIs show their age.
+`target` と `action` の役割は何でしょう？えぇと、これは Ruby の世界へオリジナルの Objective-C SDK が漏れ出てきたものです(´д｀) ごく最近まで、Objecive-C で無名関数をコールバックとして渡すことができませんでした。その代替手段として、オブジェクトとオブジェクトから呼び出すメソッドの名前を API に渡しています。私たちはこの処理を Ruby でブロックとラムダで行いますが、悲しいことに古い iOS の API は古くささを示してます。
 
-Anyway, `target` is the object you want to call the `action` function on. Let's implement it in our `TapController` so you get a better idea:
+それはさておき、`target` は `action` のメソッドを呼び出してもらいたいオブジェクトを指定します。より良いアイディアを得るために `TapController` へ `push` メソッドを実装してみましょう！
 
 ```ruby
 ...
@@ -76,11 +77,11 @@ Anyway, `target` is the object you want to call the `action` function on. Let's 
 ...
 ```
 
-Make more sense now? When the user taps the bar button, `push` gets called on the `target`, which in this case is our controller.
+どうでしょう？ユーザがバーのボタンをタップしたときに、`target` で指定したオブジェクト(このケースでは私たちのコントローラ) の `push` が呼ばれます。
 
-In addition to `navigationItem`, `UIViewController`s also have a property for their `navigationController`, if available. On the nav controller we call `pushViewController` which pushes the passed controller onto the stack. By default, the navigation controller will also show a back button which handles popping the current controller for us (normally we call `popViewControllerAnimated:` on the navigation controller). Kind of neat, right?
+`navigationItem` に付け加えると、利用可能な場合には `UIViewController` は `navigationController` というプロパティも持っています。ナビゲーションコントローラでは、`pushViewController` を呼び出すと渡されたコントローラをスタック上にプッシュします。デフォルトでは、ナビゲーションコントローラは戻るボタンも表示します。この戻るボタンは現在のコントローラをポップする処理を行います(通常は、ナビゲーションコントローラ上で `popViewControllerAnimated:` を私たちが呼び出します)。ちゃんとわかりましたか？
 
-Let's have one last bit of fun before we run the app. Have the controller's title reflect its position in the navigation stack, like so:
+アプリを実行する前にもう少しだけ手を加えてみましょう。次のように、ナビゲーションスタックでのコントローラの位置をコントローラのタイトルに反映してみましょう。
 
 ```ruby
   def viewDidLoad
@@ -90,19 +91,19 @@ Let's have one last bit of fun before we run the app. Have the controller's titl
   end
 ```
 
-Now `rake` and observe our dynamic controllers!
+さぁ、`rake` を実行して動的に変化するコントローラを観察してみましょう！
 
 ![pushable controllers](images/2.png)
 
-Now, I said we'd cover `UITabController`s too, so let's get to it.
+さて、`UITabController` も取り扱うよと言いましたので、さっそくそれに取りかかってみましょう。
 
 ## UITabBarController
 
 ![Navigation controller in Mail.app](images/tab_bar.png)
 
-Tab controllers are a lot like `UINavigationController` and other container controllers: it has a list of `viewControllers` which are presented within the container's "chrome" (the black bar). However, unlike the other containers, `UITabBarController`s are only supposed to act as the `rootViewController` of the window (i.e. you shouldn't push a tab bar controller inside a navigation controller).
+タブコントローラは `UINavigationController` やほかのコンテナコントローラとよく似て、コンテナのメッキ部分(黒いバーのところ)に提示される `viewControllers` のリストを持っています。しかし異なる点もあり、`UITabBarController` は window の `rootViewController` として動作することのみをサポートしています。(すなわち、ナビゲーションコントローラでタブバーコントローラをプッシュしてはいけません)。
 
-In `AppDelegate`, let's make a small change:
+`AppDelegate` で、小さな変更を加えてみましょう。
 
 ```ruby
   ...
@@ -115,17 +116,17 @@ In `AppDelegate`, let's make a small change:
   ...
 ```
 
-Unlike other code examples, this doesn't have anything new! We create the `UITabBarController` like a normal `UIViewController` and set its `viewControllers` to an array with our navigation controller.
+これまでのコード例と異なり、新しいものは何もありません！`UITabBarController` を普通の `UIViewController` のときのように作成し、タブコントローラの `viewControllers` にナビゲーションコントローラを配列に入れたものを設定しています。
 
-`rake` and check it out!
+`rake` を実行し、チェックしてみましょう！
 
 ![tab bar controller](images/3.png)
 
-Kind of...underwhelming, I guess. Let's start to pretty it up by adding an icon to our tab bar.
+ちょっと見た目にガッカリしたんじゃないでしょうか。タブバーにアイコンを追加し綺麗にしてみましょう。
 
-Much like `navigationItem`, every `UIViewController` has a `tabBarItem` property, which accepts an instance of `UITabBarItem`. We can use this object to customize the icon, title, and other appearance options of our controller's tab.
+`navigationItem` と同様に、すべての `UIViewController` には `tabBarItem` というプロパティがあり、`UITabBarItem` のインスタンスを受け付けます。アイコン、タイトル、あるいはコントローラのタブ部分の見た目に関するオプションをカスタマイズする際にこのオブジェクトを使うことができます。
 
-Override `initWithNibName:bundle:` in TapController, and go ahead and create such an object:
+TapController で `initWithNibName:bundle:` をオーバーライドし、次のようなオブジェクトを作成します。
 
 ```ruby
   ...
@@ -137,13 +138,13 @@ Override `initWithNibName:bundle:` in TapController, and go ahead and create suc
   ...
 ```
 
-This is one initializer for `UITabBarItem`; you can also use `initWithTitle:image:tag:` if you want to supply a custom image and title. If you do use a custom image, it needs to be a 30x30 black and transparent icon.
+これは `UITabBarItem` のための初期化メソッドです。独自の画像やタイトルを利用したい場合には、`initWithTitle:image:tag:` も使うことができます。独自の画像を利用する場合は、30x30 の黒い透過なアイコンにする必要があります。
 
-`initWithTabBarSystemItem:` makes our lives a little easier for demonstrating a tab icon, but it will force the title to correspond to the system's image (in this case, "Favorites").
+`initWithTabBarSystemItem:` はタブのアイコンをデモンストレーションするのを少し楽にしてくれますが、システムで用意されている画像に対応するタイトルが強制的に使用されます(このケースでは、"Favorites")。
 
-Why do we put it in `initWithNibName:bundle:`? Because we want it to create the `tabBarItem` as soon as the controller exists, regardless of whether or not its `view` exists. If you put it in `viewDidLoad`, then it might not get created when the app launches (tab bar controllers only load each child controller when its first accessed by the user).
+なぜ `initWithNibName:bundle:` のなかで記述しているのでしょう？コントローラのビューが用意されたかどうかにかかわらず、コントローラが用意されたらできるだけ早く `tabBarItem` を作成したいからです。もし `viewDidLoad` に記述した場合、アプリが起動したときにすぐに作成できないかもしれません(ユーザによってコントローラに初めてアクセスがあったときに、タブバーコントローラは子のコントローラをロードします)。
 
-One more thing! Let's make another tab. We don't really have anything to do in this other tab yet, so let's just make an empty `UIViewController` with a different background color in `AppDelegate`:
+One more thing! ほかのタブも作成してみましょう。このタブで行う処理はありませんので、`AppDelegate` で、異なる背景色で空の `UIViewController` を作りましょう。
 
 ```ruby
   ...
@@ -157,18 +158,19 @@ One more thing! Let's make another tab. We don't really have anything to do in t
   ...
 ```
 
-`rake` and voila! A whole bunch of container controllers! They don't do a whole lot, but you can easily see how these few classes form the building blocks of 80% of iOS apps.
+`rake` を実行してできあがり！コンテナコントローラの全容です！これらは全体の一部にすぎませんが、iOS アプリの 80% を構成する積み木はわずかなクラスであることが簡単に分かるでしょう。
 
 ![multiple tabs](images/4.png)
 
 ## Subway Up
 
-Let's rundown what we covered:
+私たちがカバーした範囲は、次のことまで広がりました。
 
-- The iOS SDK uses `UINavigationController`s and `UITabBarController`s for containing "child" view controllers.
-- `UINavigationController` uses 'pushViewController:animated:' and 'popViewControllerAnimated:' to control the stack.
-- Use `controller.navigationItem` to change the buttons and other options of the top blue bar for a controller.
-- `UITabBarController` uses `viewControllers=` to control its children; note that `UITabBarController` should *only* be used as the `rootViewController` of a window.
-- Use `controller.tabBarItem` to change the tab icon and title displayed for that controller.
+- iOS SDK は子のビューとなるコントローラを含むために `UINavigationController` と `UITabBarController` を使用します。
+- `UINavigationController` はスタックをコントロールするために 'pushViewController:animated:' と 'popViewControllerAnimated:' を使います。
+- 画面上部の青いバーのボタンやそのほかのオプションを変更するのには `controller.navigationItem` を使用します。
+- `UITabBarController` は子のコントローラをコントロールするために `viewControllers=` を使用します。注意として、`UITabBarController` は window の `rootViewController` としてしか使えません。
+- タブのアイコンやタイトルを変更するのには `controller.tabBarItem` を使用します。
 
-[Simply walk to Mordor/the next chapter to learn about Tables!](/5-tables)
+["The Lord of the Rings" のモルドールへ向けて歩こう。次の章ではテーブルにについて学びます！]
+(/5-tables)
