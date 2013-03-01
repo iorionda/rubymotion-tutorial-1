@@ -49,7 +49,7 @@ categories:
 
 画面上部のナビゲーションバーに実際にボタンを配置することができます。たとえば、Mail.app では「編集」ボタンがナビゲーションバーに配置されています。これらのボタンは `UIBarButtonItem` のインスタンスで、いくつかオプションを設定できます(テキストを使用する？画像は？システムアイコンは？などなど)。
 
-`TapsController` の `viewDidLoad` で、ボタンを追加してみましょう。
+`TapController` の `viewDidLoad` で、ボタンを追加してみましょう。
 
 ```ruby
 def viewDidLoad
