@@ -1,5 +1,5 @@
 task :deploy do
-  system 'git checkout master'
+  system 'git checkout japanese'
   system 'rm -rf ./_site'
   system 'mkdir _site'
   system 'jekyll'
@@ -21,6 +21,6 @@ task :deploy do
   system 'git add .'
   system "git commit -m 'Sync gh-pages \n #{msg}'"
   system 'git push origin gh-pages'
-  system 'git checkout master'
+  system 'git checkout japanese'
   system 'rm -rf ../_site'
 end
