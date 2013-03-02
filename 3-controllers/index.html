@@ -1,0 +1,236 @@
+
+<!doctype html>
+  <head>
+    <title> Controllers |  RubyMotion Tutorial</title>
+    <meta name="description" content="Use UIViewControllers to organize your app" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="all" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta name="author" content="Clay Allsopp" />
+
+    <meta property="og:title" content="RubyMotion Tutorial: Write iOS apps in Ruby" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://rubymotion-tutorial.com/" />
+    <meta property="og:image" content="http://i.imgur.com/mndCd.png" />
+    <meta property="og:site_name" content="RubyMotion Tutorial" />
+    <meta property="og:description" content="Learn to write iOS apps in Ruby.">
+    <meta property="fb:admins" content="1398782310" />
+    <meta property="fb:app_id" content="340990539314215" />
+
+    <meta name=viewport content="width=device-width, initial-scale=1.0,maximum-scale = 1.0">
+
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap-responsive.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/blog/pygments.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/patch.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/chapter.css'>
+    
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-33404343-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+
+  <body>
+    <a id="fork-me" href="https://github.com/clayallsopp/rubymotion-tutorial" target="_blank">Fork me on GitHub</a>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2" id="derp">
+            <nav>
+            <ul class="nav nav-list">
+              <li class="nav-header" id="chapter-nav-btn">
+                Chapters <i class="icon-chevron-up" id="chapter-nav-chevron"></i>
+              </li>
+            </ul>
+            <ul class="nav nav-list" id="chapter-nav">
+              
+                <li >
+                  <a href="/0-in-motion">In Motion</a>
+                </li>
+              
+                <li >
+                  <a href="/1-hello-motion">Hello Motion</a>
+                </li>
+              
+                <li >
+                  <a href="/2-views">Views</a>
+                </li>
+              
+                <li  class="active" >
+                  <a href="/3-controllers">Controllers</a>
+                </li>
+              
+                <li >
+                  <a href="/4-containers">Containers</a>
+                </li>
+              
+                <li >
+                  <a href="/5-tables">Tables</a>
+                </li>
+              
+                <li >
+                  <a href="/6-animations">Animations</a>
+                </li>
+              
+                <li >
+                  <a href="/7-models">Models</a>
+                </li>
+              
+                <li >
+                  <a href="/8-testing">Testing</a>
+                </li>
+              
+                <li >
+                  <a href="/9-http">HTTP</a>
+                </li>
+              
+                <li >
+                  <a href="/10-api-driven-example">API Driven Example</a>
+                </li>
+              
+            </ul>
+            <ul class="nav nav-list">
+              <li class="divider"></li>
+              <li><a href="/">Home</a></li>
+              <li><a href="http://github.com/clayallsopp/rubymotion-tutorial">Source</a></li>
+              <li class="divider"></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="span10" id="content">
+          <div id="main">
+            <h1 id="toc_8">Controllers</h1>
+
+<p>ビューについていくつかふれてきましたが、しかしそれは iOS SDK が使用する &quot;Model-View-Controller&quot; パラダイムの 1 つです。MVC は複雑に聞こえますが、実際には非常にシンプルです。</p>
+
+<p>それはコードの中に、ビュー (みなさんは既にそれを使いました)、モデル (データを表現し、処理します)、そしてコントローラの 3 種類のクラスを持っているべきという考えです。</p>
+
+<p>それでは、コントローラとは何でしょうか？コントローラはモデルとビューの間の層として動作するオブジェクトで、ユーザからのイベントに応答しモデルの変更やビューの更新を行います。とても良く書かれたコードでは、ボタンをタップしたときに、コントローラはイベントを奪い、データのプロパティを更新し、新しいデータを反映するためにビューを変更します。</p>
+
+<p>「全体像」の類いように聞こえますが、コントローラにはいくつか本当に実用的なことがあります。</p>
+
+<ul>
+<li><strong>ビューの再利用</strong>. 投稿に関する情報 <code>Post</code> (投稿内容、投稿者、&quot;Likes&quot; など) をすべて表示する <code>PostView</code> を考えてみましょう。メインのフィードやユーザプロフィールフィードなど、異なる画面でこのビューを使用したいです。ビューを再利用できるように維持するため、<code>PostView</code> は情報を取得する方法を扱うべきではありません。その代わり、コントローラでそれを処理し、処理されたデータをビューへ渡すべきです。</li>
+<li><strong>プレゼンテーションの管理</strong>. 画面全体を取り扱うビューが欲しいときもあれば、同じことをモーダルボックスに表示するものが欲しい場合があります (iPad と iPhone を考えると)。プレゼンテーションのスタイルだけが異なる、まったく同じ 2 つのビュークラスを記述することは賢明ではないので、コントローラを使いビューにあわせてリサイズやアニメーションを行います。</li>
+</ul>
+
+<p>MVC についてモデルとビューで技術的に難しいことはありません。もしみなさんが MVC を採用すれば、より強固で管理が容易なコードとなることでしょう。</p>
+
+<p>iOS の世界では、コントローラは <code>UIViewController</code> です。<code>UIViewController</code> には 1 つの <code>view</code> プロパティとビューのライフサイクルのようなことを対処するためのメソッドがあり、またデバイスの向きの変更 (横向きから縦向きへ変更など) を対処します。心配しないでください、私たちはすぐにビジネスライフサイクルを得るでしょう。</p>
+
+<p>コントローラが何か、それがすべきことが何かを知りました。では、何を*すべきではない*のでしょう？</p>
+
+<ul>
+<li>データを直接参照したり、保存すること。コントローラで HTTP リクエストを送信することは魅力的ですが、これらはモデルで行うのがベストです。</li>
+<li>複雑なビューレイアウトを扱うこと。もし、コントローラの <code>view</code> に 1 つ以上のサブビューを直接追加しているのでしたら、ビューでそれを行うようにビューを書き直すべきです。コントローラに書かれている <code>addSubview</code> は <code>self.view.addSubview</code> だけというのが、良い経験則です。</li>
+</ul>
+
+<p>OK、説明は終わりです。マイケル・ベイ監督がアクションを撮影する時間ですね。</p>
+
+<h2 id="toc_9">Everything Is Under Controllers</h2>
+
+<p><code>./app/controllers</code> ディレクトリを作成し (<code>mkdir ./app/controllers</code>)、<code>TapController.rb</code> ファイルをディレクトリ内に追加します。さぁ、次のようにコントローラを書き始めましょう。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="k">class</span> <span class="nc">TapController</span> <span class="o">&lt;</span> <span class="no">UIViewController</span>
+  <span class="k">def</span> <span class="nf">viewDidLoad</span>
+    <span class="k">super</span>
+
+    <span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">redColor</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p><code>viewDidLoad</code> は <code>UIViewController</code> のライフサイクルを形作るメソッドの 1 つで、<code>self.view</code> で示されるビューが作成され、追加されたサブビューが利用できるようになると呼び出されます。今日のところは、赤い背景色のビューとしておきましょう。</p>
+
+<p>皆さんは、絶対に、疑うこと無く、<code>viewDidLoad</code> で <code>super</code> を呼び出す必要があります。そうでなければ、良くないことが起こるでしょう。分かりました？</p>
+
+<p>さて、<code>AppDelegate</code> へ戻り、以前の <code>UIView</code> のコードを削除しましょう。私たちは 1 行追加する必要があり、次のようになります。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="k">class</span> <span class="nc">AppDelegate</span>
+  <span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span><span class="ss">:launchOptions</span><span class="p">)</span>
+    <span class="vi">@window</span> <span class="o">=</span> <span class="no">UIWindow</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">UIScreen</span><span class="o">.</span><span class="n">mainScreen</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+    <span class="vi">@window</span><span class="o">.</span><span class="n">makeKeyAndVisible</span>
+
+    <span class="c1"># This is our new line!</span>
+    <span class="vi">@window</span><span class="o">.</span><span class="n">rootViewController</span> <span class="o">=</span> <span class="no">TapController</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithNibName</span><span class="p">(</span><span class="kp">nil</span><span class="p">,</span> <span class="n">bundle</span><span class="p">:</span> <span class="kp">nil</span><span class="p">)</span>
+
+    <span class="kp">true</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p><code>rootViewController=</code> の呼び出しが分かりますか？ window が与えられた <code>UIViewController</code> を受け取り、window にフィットするように <code>view</code> のサイズを調整します。これは、window をセットアップするための良い方法です(<code>window.addSubview</code> とは対照的に)。</p>
+
+<p>追加した行でほかに新しい部分は <code>initWithNibName:bundle:</code> です。一般的に、これは <code>NIB</code> ファイルからコントローラを読み込むために使われます。<code>NIB</code> は Xcode の Interface Builder を使うことで作られます。私たちのコントローラのためには Interface Builder を使っていないので、2 つの引数の両方に nil を渡すことができます。</p>
+
+<p><code>initWithNibName:bundle:</code> は <code>UIViewController</code> のイニシャライザでもあります。コントローラを作成するたびに、このメソッドを呼び出します。</p>
+
+<p>エディタを邪魔にならないところにどけておいて、<code>rake</code> を実行してチェックしてみましょう。次のように表示されます。</p>
+
+<p><img src="images/1.png" alt="first controller"></p>
+
+<p>大事は小事より起こります。さぁ、コントローラに小さな変更を行いましょう。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax">  <span class="k">def</span> <span class="nf">viewDidLoad</span>
+    <span class="k">super</span>
+
+    <span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">whiteColor</span>
+
+    <span class="vi">@label</span> <span class="o">=</span> <span class="no">UILabel</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectZero</span><span class="p">)</span>
+    <span class="vi">@label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Taps&quot;</span>
+    <span class="vi">@label</span><span class="o">.</span><span class="n">sizeToFit</span>
+    <span class="vi">@label</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="no">CGPointMake</span><span class="p">(</span><span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">addSubview</span> <span class="vi">@label</span>
+  <span class="k">end</span>
+</code></pre>
+</div>
+
+<p>ワイルドな <code>UILabel</code> が登場です！<code>UILabel</code> は <code>text</code> プロパティで静的なテキストを表示するためのビューです。テキストに &quot;Taps&quot; を設定し、サブビューとしてそれを追加しています。</p>
+
+<p>画面に表示するテキストの正確なサイズがまだ分からないので、<code>UILabel</code> を初期化するときに、<code>CGRectZero</code> を frame に使います。しかし、<code>sizeToFit</code> を呼び出すと、内容に合わせて完全にフィットするようにラベルがリサイズします。そして便利な <code>center</code> プロパティを使い、ラベルをコントローラのビューの中央に揃えます。</p>
+
+<p>楽しいアプリのために、再び <code>rake</code> を実行します。今のところアプリは・・・何もしませんが、それは次の章で。</p>
+
+<p><img src="images/2.png" alt="with a label"></p>
+
+<h2 id="toc_10">Wrap Up</h2>
+
+<p>今回、学んだことは何だった？</p>
+
+<ul>
+<li>iOS SDK は Model-View-Controller を使います。</li>
+<li><code>UIViewController</code> はコントローラの一部を作成し、カスタマイズのために <code>UIViewController</code> のサブクラスを作ります。</li>
+<li>コントローラをセットアップするときには <code>viewDidLoad</code> を使い、*super* を呼び出しておくことを忘れてはいけません。</li>
+<li><code>UIWindow</code> はコントローラを表示するために <code>rootViewController</code> プロパティを持ってます。</li>
+</ul>
+
+<p><a href="/4-containers">次の章へ棒高跳び。Container Controllers で遊ぼう！</a></p>
+
+          </div>
+          <hr />
+          <h2>Like it?<small id="spread"> Spread the word</small></h2>
+          <div id="social">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://rubymotion-tutorial.com" data-text="RubyMotion Tutorial: Make iOS Apps With Ruby" data-size="large" data-related="clayallsopp" data-count="none">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+            <iframe id="facebook-like" src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Frubymotion-tutorial.com&amp;send=false&amp;layout=standard&amp;width=480&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=340990539314215" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/bootstrap.min.js' type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/chapters.js' type="text/javascript"></script>
+  </body>
+</html>

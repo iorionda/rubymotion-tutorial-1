@@ -1,0 +1,150 @@
+
+<!doctype html>
+  <head>
+    <title> In Motion |  RubyMotion Tutorial</title>
+    <meta name="description" content="" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="all" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta name="author" content="Clay Allsopp" />
+
+    <meta property="og:title" content="RubyMotion Tutorial: Write iOS apps in Ruby" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://rubymotion-tutorial.com/" />
+    <meta property="og:image" content="http://i.imgur.com/mndCd.png" />
+    <meta property="og:site_name" content="RubyMotion Tutorial" />
+    <meta property="og:description" content="Learn to write iOS apps in Ruby.">
+    <meta property="fb:admins" content="1398782310" />
+    <meta property="fb:app_id" content="340990539314215" />
+
+    <meta name=viewport content="width=device-width, initial-scale=1.0,maximum-scale = 1.0">
+
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap-responsive.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/blog/pygments.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/patch.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/chapter.css'>
+    
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-33404343-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+
+  <body>
+    <a id="fork-me" href="https://github.com/clayallsopp/rubymotion-tutorial" target="_blank">Fork me on GitHub</a>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2" id="derp">
+            <nav>
+            <ul class="nav nav-list">
+              <li class="nav-header" id="chapter-nav-btn">
+                Chapters <i class="icon-chevron-up" id="chapter-nav-chevron"></i>
+              </li>
+            </ul>
+            <ul class="nav nav-list" id="chapter-nav">
+              
+                <li  class="active" >
+                  <a href="/0-in-motion">In Motion</a>
+                </li>
+              
+                <li >
+                  <a href="/1-hello-motion">Hello Motion</a>
+                </li>
+              
+                <li >
+                  <a href="/2-views">Views</a>
+                </li>
+              
+                <li >
+                  <a href="/3-controllers">Controllers</a>
+                </li>
+              
+                <li >
+                  <a href="/4-containers">Containers</a>
+                </li>
+              
+                <li >
+                  <a href="/5-tables">Tables</a>
+                </li>
+              
+                <li >
+                  <a href="/6-animations">Animations</a>
+                </li>
+              
+                <li >
+                  <a href="/7-models">Models</a>
+                </li>
+              
+                <li >
+                  <a href="/8-testing">Testing</a>
+                </li>
+              
+                <li >
+                  <a href="/9-http">HTTP</a>
+                </li>
+              
+                <li >
+                  <a href="/10-api-driven-example">API Driven Example</a>
+                </li>
+              
+            </ul>
+            <ul class="nav nav-list">
+              <li class="divider"></li>
+              <li><a href="/">Home</a></li>
+              <li><a href="http://github.com/clayallsopp/rubymotion-tutorial">Source</a></li>
+              <li class="divider"></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="span10" id="content">
+          <div id="main">
+            <h1 id="toc_0">Prologue: In Motion</h1>
+
+<h2 id="toc_1">はじめに</h2>
+
+<p>ここ 5 年間で iOS 向けに開発された製品は、その数も種類も誰にも想像できないほどでした。とはいえ iOS 開発のプロセスは基本的には何も変わってきませんでした。Objective-C 言語には嬉しい改善点 (block や ARC, リテラル) もありましたが、長い期間にわたって Apple が Objective-C にこだわり続けようとしていることは明らかです。</p>
+
+<p>そしてそれは別に悪いことではありません。動的で、オブジェクト指向を取り入れた C 言語のサブセットという Objective-C の目指すもの自体は素晴らしいです。コンパイル時の型チェックだけでなく、イントロスペクションやリフレクションのような実行時プログラミングもできるので、魔法のようでかつ安定した技術をコードに取り入れることができます。</p>
+
+<p>しかしその強みにも関わらず、多くの開発者はこのニッチで風変わりな言語を iOS ソフトウェアのためだけに学ぶことの将来性を案じ、ためらっています。代わりに慣れ親しんだ、HTML5 のようなネイティブではなく結局標準以下のユーザー体験しか作り出せないものに向かってしまっています。もしもっとわかりやすい言語でネイティブかつ効率良く iOS アプリを開発できる言語があったら素晴らしいとは思いませんか？ ヾ(｀д´*)ﾉ彡☆ﾊﾞﾝﾊﾞﾝ!!</p>
+
+<h2 id="toc_2">そして Motion がある</h2>
+
+<p><a href="http://rubymotion.com">RubyMotion</a> はそんなソリューションです。ユーザ体験を損ねること無く、<a href="http://www.ruby-lang.org/en/">Ruby</a> で iOS アプリケーションを開発することが可能です。そして Apple の意図した通りにきちんと iOS SDK を使用するため、全てのコード例やチュートリアルは完璧に翻訳可能です。</p>
+
+<p>どのように動作するのでしょうか？そうですね、技術的には Ruby の <em>一種</em> です。Ruby のもつ <code>eval</code> のようなきわめて動的なメソッドは使うことができず、また <code>functions.with(some, named: parameters)</code> のような新しい機能が追加されています。これによりあなたの Ruby コードは Objective-C と同じく機械語にコンパイルされます。他の言い方をすると、デバイスは RubyMotion か通常の iOS アプリか区別することができません。</p>
+
+<p>もしあなたが Ruby を単に好きではない場合、RubyMotion はあなたの気持ちを動かすことはないでしょう。しかし全くのアンチ Ruby だったり、元とかけ離れた言語を使いたいと思う開発者でない限り、一度 RubyMotion を試してみることを強くお勧めします。</p>
+
+<p><a href="/1-hello-motion">最初の章へ進んで、始めよう！</a></p>
+
+          </div>
+          <hr />
+          <h2>Like it?<small id="spread"> Spread the word</small></h2>
+          <div id="social">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://rubymotion-tutorial.com" data-text="RubyMotion Tutorial: Make iOS Apps With Ruby" data-size="large" data-related="clayallsopp" data-count="none">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+            <iframe id="facebook-like" src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Frubymotion-tutorial.com&amp;send=false&amp;layout=standard&amp;width=480&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=340990539314215" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/bootstrap.min.js' type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/chapters.js' type="text/javascript"></script>
+  </body>
+</html>

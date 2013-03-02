@@ -1,0 +1,232 @@
+
+<!doctype html>
+  <head>
+    <title> Views |  RubyMotion Tutorial</title>
+    <meta name="description" content="Learn about UIViews and the RubyMotion interactive console" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="all" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta name="author" content="Clay Allsopp" />
+
+    <meta property="og:title" content="RubyMotion Tutorial: Write iOS apps in Ruby" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://rubymotion-tutorial.com/" />
+    <meta property="og:image" content="http://i.imgur.com/mndCd.png" />
+    <meta property="og:site_name" content="RubyMotion Tutorial" />
+    <meta property="og:description" content="Learn to write iOS apps in Ruby.">
+    <meta property="fb:admins" content="1398782310" />
+    <meta property="fb:app_id" content="340990539314215" />
+
+    <meta name=viewport content="width=device-width, initial-scale=1.0,maximum-scale = 1.0">
+
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/bootstrap-responsive.min.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/blog/pygments.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/patch.css'>
+    <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/chapter.css'>
+    
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-33404343-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+
+  <body>
+    <a id="fork-me" href="https://github.com/clayallsopp/rubymotion-tutorial" target="_blank">Fork me on GitHub</a>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2" id="derp">
+            <nav>
+            <ul class="nav nav-list">
+              <li class="nav-header" id="chapter-nav-btn">
+                Chapters <i class="icon-chevron-up" id="chapter-nav-chevron"></i>
+              </li>
+            </ul>
+            <ul class="nav nav-list" id="chapter-nav">
+              
+                <li >
+                  <a href="/0-in-motion">In Motion</a>
+                </li>
+              
+                <li >
+                  <a href="/1-hello-motion">Hello Motion</a>
+                </li>
+              
+                <li  class="active" >
+                  <a href="/2-views">Views</a>
+                </li>
+              
+                <li >
+                  <a href="/3-controllers">Controllers</a>
+                </li>
+              
+                <li >
+                  <a href="/4-containers">Containers</a>
+                </li>
+              
+                <li >
+                  <a href="/5-tables">Tables</a>
+                </li>
+              
+                <li >
+                  <a href="/6-animations">Animations</a>
+                </li>
+              
+                <li >
+                  <a href="/7-models">Models</a>
+                </li>
+              
+                <li >
+                  <a href="/8-testing">Testing</a>
+                </li>
+              
+                <li >
+                  <a href="/9-http">HTTP</a>
+                </li>
+              
+                <li >
+                  <a href="/10-api-driven-example">API Driven Example</a>
+                </li>
+              
+            </ul>
+            <ul class="nav nav-list">
+              <li class="divider"></li>
+              <li><a href="/">Home</a></li>
+              <li><a href="http://github.com/clayallsopp/rubymotion-tutorial">Source</a></li>
+              <li class="divider"></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="span10" id="content">
+          <div id="main">
+            <h1 id="toc_6">Views</h1>
+
+<p>プロジェクトを実行することができたので、画面上にものを配置してみましょう。</p>
+
+<p>アプリケーションで表示されている「もの」は「ビュー」と呼ばれます。1 つのビューはたくさんの「サブビュー」を持つことができます。ビューを移動するときには、そのサブビューも移動します。サブビューは、親のビュー上で階層状に積み重ねられます。</p>
+
+<p>コードでは、これらは <code>UIView</code> オブジェクトになります。画面上で目にするすべてのものは <code>UIView</code> の子孫です。それらは便利な機能をたくさん持っていますが、今すぐに気にすべきなものは次の機能です。</p>
+
+<ol>
+<li><code>frame</code> プロパティは、 ビューの <code>x</code> と <code>y</code> 座標、ビューの大きさである <code>width</code> と <code>height</code> という値からなります。</li>
+<li><code>subviews</code> プロパティは、ビューのすべてのサブビューからなる配列で、背後から前面という視覚的な並びになっています (<code>subviews</code> の配列からビューを取り出すときに指定する index 値は、そのビューの &quot;z-order&quot; のような感じです)。</li>
+</ol>
+
+<p><code>frame</code> は、ビューの形や親のビューとの相対的な位置を表します。説明が多いので、簡単な例を示します。座標 (10, 10) にビューがあるのを想像してください。そのビューの新しいサブビューとして、画面上の座標 (50, 50) に表示されるビューが欲しいです。そのため、新しいビューの frame に座標 (40, 40) を設定する必要があります。わかりました？</p>
+
+<p>アプリケーションの基本となるビューは &quot;window&quot; です。ほかのすべてのビューは window のサブビューか、またはそのサブビュー (またそのサブビュー、そのまた・・・) です。 アプリケーションの window は <code>UIWindow</code> と呼ばれる <code>UIView</code> のサブクラスです。</p>
+
+<p>さぁ、コードを書いてみましょう。<code>AppDelegate</code> の <code>didFinishLaunching</code> メソッドを次のように変更します。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span><span class="ss">:launchOptions</span><span class="p">)</span>
+  <span class="c1"># UIScreen describes the display our app is running on</span>
+  <span class="vi">@window</span> <span class="o">=</span> <span class="no">UIWindow</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">UIScreen</span><span class="o">.</span><span class="n">mainScreen</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+  <span class="vi">@window</span><span class="o">.</span><span class="n">makeKeyAndVisible</span>
+
+  <span class="vi">@blue_view</span> <span class="o">=</span> <span class="no">UIView</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+  <span class="vi">@blue_view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">blueColor</span>
+  <span class="vi">@window</span><span class="o">.</span><span class="n">addSubview</span><span class="p">(</span><span class="vi">@blue_view</span><span class="p">)</span>
+
+  <span class="kp">true</span>
+<span class="k">end</span>
+</code></pre>
+</div>
+
+<p>このコードをたどってみましょう。画面の大きさの <code>UIWindow</code> インスタンスを作成し、<code>makeKeyAndVisible</code> を呼び出しています。これは、基本的に window は 1 つのタッチイベントを受信し画面上に表示される必要があることを OS に指示します。(もし興味があれば複数の画面に複数の window を表示することができますが、ここでは小さな第一歩を刻みましょう)。</p>
+
+<p>window を作成し、それから、window のサブビューとして新しいビューを作成します。ビューの frame には、実際には <code>CGRectMake(x, y, w, h)</code> を使用して作成した <code>CGRect</code> オブジェクトが格納されています。気をつけてください！<code>CGRect</code> は実際には 2 つのオブジェクト <code>CGPoint</code> と <code>CGSize</code> で構成されます。座標 y を参照したい場合には <code>view.frame.position.y</code>、高さを参照したい場合には <code>view.frame.size.height</code> となります。</p>
+
+<p>また、色で遊ぶ方法について <code>UIColor</code> が示されています。<code>UIColor</code> はいくつか明確なデフォルト値 (<code>blueColor</code>, <code>redColor</code> など) がありますが、任意の配色を作成するために使用することができます。</p>
+
+<p><strong>FULL DISCLOSURE</strong>: <code>UIWindow</code> に <code>UIView</code> を単独で直接追加することは一般的に良い考えではありませんが、勉強するためには良いことです。そのため、製品のコードではそれを行いません。</p>
+
+<p>アプリケーションを実行すると (<code>rake</code> を実行します。覚えてる？)、青い箱が見て取れます。</p>
+
+<p><img src="images/1.png" alt="blue box"></p>
+
+<p>もっと箱を追加して、よりエキサイティングにしましょう！</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax">  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="vi">@blue_view</span> <span class="o">=</span> <span class="no">UIView</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+  <span class="vi">@blue_view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">blueColor</span>
+  <span class="vi">@window</span><span class="o">.</span><span class="n">addSubview</span><span class="p">(</span><span class="vi">@blue_view</span><span class="p">)</span>
+
+  <span class="vi">@green_view</span> <span class="o">=</span> <span class="no">UIView</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+  <span class="vi">@green_view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">greenColor</span>
+  <span class="vi">@window</span><span class="o">.</span><span class="n">addSubview</span><span class="p">(</span><span class="vi">@green_view</span><span class="p">)</span>
+
+  <span class="vi">@red_view</span>  <span class="o">=</span> <span class="no">UIView</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+  <span class="vi">@red_view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">redColor</span>
+  <span class="c1"># NOTE: *not* adding to @window</span>
+  <span class="vi">@blue_view</span><span class="o">.</span><span class="n">addSubview</span><span class="p">(</span><span class="vi">@red_view</span><span class="p">)</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</code></pre>
+</div>
+
+<p>再び <code>rake</code> を実行します。赤いビューが緑のビューよりも下側にあることがわかります。一見、同じ <code>frame</code> にもかかわらず？</p>
+
+<p><img src="images/2.png" alt="more boxes"></p>
+
+<p>おもしろいので、インタラクティブ <code>REPL</code> で遊んでみましょう。<code>rake</code> を実行した Terminal は、シミュレータを開いている間、<code>irb</code> のようなプロンプトが表示されます。さぁ、<code>@blue_view</code> を見つけてみましょう。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="o">&gt;</span> <span class="n">delegate</span> <span class="o">=</span> <span class="no">UIApplication</span><span class="o">.</span><span class="n">sharedApplication</span><span class="o">.</span><span class="n">delegate</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;AppDelegate&gt;</span>
+<span class="o">&gt;</span> <span class="n">blue_view</span> <span class="o">=</span> <span class="n">delegate</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="s1">&#39;@blue_view&#39;</span><span class="p">)</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;UIView&gt;</span>
+</code></pre>
+</div>
+
+<p>私たちは何をしたのでしょうか？ <code>UIApplication.sharedApplication</code> は、システムがアプリケーションを描画するために使用するオブジェクトを返してくれます。delegate を使用するための設定について以前述べましたが、 <code>.delegate</code> で返されるものはそのオブジェクトです。そのオブジェクトを手に入れれば、ビューを取得するために、便利な <code>instance_variable_get</code> を使うことができます。</p>
+
+<p>ビューがサブビューを 1 つ持っていることを <code>blue_view.subviews.count</code> で確認することができます。<code>red_view</code> を取得して、そのビューを削除してみましょう。</p>
+<div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="o">&gt;</span> <span class="n">blue_view</span><span class="o">.</span><span class="n">subviews</span><span class="o">.</span><span class="n">count</span>
+<span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="o">&gt;</span> <span class="n">red_view</span> <span class="o">=</span> <span class="n">blue_view</span><span class="o">.</span><span class="n">subviews</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;UIView&gt;</span>
+<span class="o">&gt;</span> <span class="n">red_view</span><span class="o">.</span><span class="n">removeFromSuperview</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;UIView&gt;</span>
+</code></pre>
+</div>
+
+<p>ビューは消えました。<code>removeFromSuperview</code> メソッドは、自身のビューを画面から削除します。そして、red_view は親のビューの <code>subviews</code> でした (再び <code>blue_view.subviews.count</code> を実行することで確認できます)。</p>
+
+<h2 id="toc_7">Wrap Up</h2>
+
+<p>この例はそれほど長くはありませんでしたが、ビューの核となるコンセプト、ビューには frame とサブビューがあることを説明しました。例ではシンプルでしたが、実際にアプリケーションを作成するとはるかに複雑になります。したがって、私たちはそれらを対処するためにより良い基盤が必要です。</p>
+
+<p>まとめ</p>
+
+<ul>
+<li>画面上のすべてのものは <code>UIView</code> です。</li>
+<li>アプリケーションの基本となるビューは <code>UIWindow</code> のインスタンスです。ほかのビューは <code>UIWindow</code> の子孫です。 <code>UIWindow</code> を delegate で作成します。</li>
+<li>ビューはサブビューを持っていて、<code>UIView#addSubview</code> で追加します。サブビューはお互いの上に積み重ねられます。</li>
+</ul>
+
+<p><a href="/3-controllers">次の章にムーンウォークしよう！あなたの手はコントローラで汚れるよ！</a></p>
+
+          </div>
+          <hr />
+          <h2>Like it?<small id="spread"> Spread the word</small></h2>
+          <div id="social">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://rubymotion-tutorial.com" data-text="RubyMotion Tutorial: Make iOS Apps With Ruby" data-size="large" data-related="clayallsopp" data-count="none">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+            <iframe id="facebook-like" src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Frubymotion-tutorial.com&amp;send=false&amp;layout=standard&amp;width=480&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=340990539314215" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/bootstrap.min.js' type="text/javascript"></script>
+  <script src='http://clayallsopp.github.com/rubymotion-tutorial/js/chapters.js' type="text/javascript"></script>
+  </body>
+</html>
