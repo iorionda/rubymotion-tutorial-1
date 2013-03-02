@@ -8,13 +8,13 @@ categories:
 
 # Animations
 
-When you ask users about the biggest differences between iOS and other mobile operating systems, animations will definitely be one of the top answers. There are fades, flips, spins, bounces, and curls abound in Apple's apps.
+みなさんが iOS と他のモバイル OS との最大の違いについてユーザに尋ねると、アニメーションは間違いなくトップの答えのひとつとなるでしょう。フェード、フリップ、回転、バウンド、カールは Apple のアプリにありふれています。
 
-Some of these are prominent in the default UI elements (`UINavigationController`, `UITableView`, etc), but what's really great is that they're all built upon the very same APIs you and I use. Literally every `UIView` is animatable with only one line of code. It's unbelievably great.
+これらのいくつかはデフォルトの UI 要素 (`UINavigationController`, `UITableView` など) で顕著です。そして本当に素晴らしいことは、それらはすべて同じ API に基づいて構築されているということです。文字通り、`UIView` はたった 1 行のコードでアニメーションできます。それは信じられないくらい素晴らしいことです。
 
-So let's have some fun. We're going to move a box around the screen. Trust me, the code is as simple as it sounds (which is a good thing!).
+さぁ、さっそくいくつか遊んでみましょう。画面の周りにボックスを移動させてみましょう。私を信じてください。コードは今述べた通りにシンプルです。
 
-We'll start by adding a view to our `window` and animating it around a set of points. Since this is relatively short, I'll just drop all the changes for your `AppDelegate` right here:
+`window` に view を追加することから始め、そして設定したポイントの周辺でアニメーションします。これは比較的に短いので、ここで `AppDelegate` のすべての変更を破棄しましょう。
 
 ```ruby
 def application(application, didFinishLaunchingWithOptions:launchOptions)
@@ -52,9 +52,9 @@ def animate_to_next_point
 end
 ```
 
-There's a couple new structures in this code. First, the `[[0, 0], [100, 100]]` syntax for `frame`. This nested array structure is shorthand for the `CGRectMake` we've used before; the first sub-array represents the `origin` point and the second represents the `size` structure. This is nice because it allows easy use of `@points` to change the `frame`.
+このコードには新しく登場したものが 2 つあります。最初に、`[[0, 0], [100, 100]]` という構文は `frame` のためのものです。入れ子にした配列はこれまで使ってきた `CGRectMake` を簡略化したものです。最初の配列は `origin` の値を表し、二つ目の配列は `size` の値を表しています。`frame` を変更するために `@points` を簡単に使用することができ、素晴らしいことです。
 
-Second is `lambda`. If you're not familar with that terminology, `lambda`s are traditionally small functions assigned to variables or passed as arguments. For example, you can do `my_lambda = lambda { p "Hello!" }`. Now when you run `my_lambda.call`, the code within the `lambda` block will execute. Your `lambda` can also have an argument:
+二つ目は `lambda` です。もしこの用語を慣れていなければ、`lambda` は伝統的に小さな関数で変数が割り当てられたり引数が渡されたりするものです。たとえば、`my_lambda = lambda { p "Hello!" }` とすることができます。ここで `my_lambda.call` を実行すると、`lambda` ブロック内のコードが実行されます。`lambda` は引数を持つこともできます。
 
 ```ruby
 my_lambda = lambda { |name| p "Hello #{name}!" }
@@ -62,31 +62,31 @@ my_lambda.call("Clay")
 => Hello Clay
 ```
 
-Anyway, back to our example. We create a window like usual and define some points to move our box on. We add our box (`@view`) to the window and start `animate_to_next_point`, which is where the proverbial magic happens.
+さて、アニメーションの例に戻りましょう。いつものような window を作成し、ボックスを移動するためにいくつかポイントを定義します。window にボックス (`@view`) を追加し、`animate_to_next_point` を開始することでよく知られたマジックが起こります。
 
-The `UIView.animateWithDuration:animations:completion:` function is the flux-capacitor of animations: it's what makes them possible. There are a lot of parts to this function, so let's take it one at a time.
+`UIView.animateWithDuration:animations:completion:` はアニメーションを制御するものです。たくさんのパーツがこのメソッドにあるので、ひとつずつ見ていきましょう。
 
-`duration` sets how long the animations will last, in seconds. You can use float values if you want, like `1.85`. A good rule of thumb is that "quick" animations should be `.3` seconds.
+`duration` にはアニメーションをどのくらい継続するかを秒単位で設定します。`1.85` のように float の値を使うこともできます。指にとって良いルールは "素早い" アニメーションは `.3` 秒にされることです。
 
-Any changes you make to *any* views in the `animations:` lambda will animate smoothly. How cool is that!? For comparison, on Android you have to create a custom `Animation` object for each property you want to animate. Now, there are some properties which aren't animatable, but common ones like `frame`, `bounds`, and `alpha` work just fine (for a complete list, check [this][1]). In our case, we set `@view.frame` to have the next origin in our set of `@points`.
+*任意の* view に対して `animations:` の lambda で行った変更がスムーズにアニメーションされます。なんてクールなんでしょう！？Android と比較すると、Android では望むアニメーションのために各プロパティの独自の `Animation` オブジェクトを作成する必要があります。さて、いくつかのプロパティはアニメーションできませんが、`frame`, `bounds` や `alpha` といった一般的なものは問題なく動きます (完全なリスト [this][1] をチェックしてください)。私たちの場合では、`@view.frame` の値を `@points` で用意してある次の origin に設定します。
 
-Finally, `completions:` is called after your animations finish. You *must* accept an argument in this lambda; it will be a `boolean` value which tells you if the animations really did finish. Animations usually fail because they were canceled by other animations, but that only happens when you explicitly coerce it.
+最後に、`completions:` はアニメーションが終了した後で呼び出されます。この lambda では *必ず* 引数を受け付ける必要があります。アニメーションが本当に終了したかを通知する `boolean` の値になります。他のアニメーションを明示的に行う場合にのみ、それによってアニメーションが取り消されるため、アニメーションは失敗となることがあります。
 
-`rake` and you'll see our blue box sliding around the upper left corner of the simulator. Wasn't that gloriously easy?
+`rake` を実行し、シミュレータの左上の角をスライドする青いボックスが表示されます。とても簡単でしたよね？
 
 ![simple box animations](images/1.png)
 
-Man I still can't get over how easy that was. Let's spice it up a bit by changing our animation to 1) have a delay 2) have a different "animation curve". Unfamiliar with that? Take a look at our current animation. Notice how the box speeds up and slows down in between each point? Well, look closer, I promise you it does.
+私はこんなに簡単であったという衝撃を忘れることができません。さきほどのアニメーションに 1) delay を持たせる 2) 別の "アニメーションカーブ" を持たせる、と変更することでスパイスを振りかけましょう。慣れていない？現在のアニメーションを見てみましょう。各ポイントの間で、ボックスがスピードアップしスローダウンのしかたに気がつきました？詳しく見てみましょう。
 
-The reason this happens is because the default animation curve in iOS is `UIViewAnimationOptionCurveEaseInOut`. It's a really nice effect because it simulates how movement often occurs in real life: we don't just start and stop on a dime, we gradually get up to speed. But for fun, let's use another curve.
+この動きになる理由は、iOS のデフォルトのアニメーションカーブが `UIViewAnimationOptionCurveEaseInOut` だからです。実際の生活のなかで頻繁におこる動き方をシミュレートしていて本当に素晴らしいエフェクトです。私たちは素早く方向転換しませんし、徐々にスピードをあげます。いろいろ遊ぶために、別のカーブを使ってみましょう。
 
-We can change our `animateWithDuration:animations:completion:` function to it's more verbose form, `animateWithDuration:delay:options:animations:completion:` to change add a delay before the animation starts and mess with `options`. `delay` takes a value in seconds which will offset the start of our `animations:` block.
+これまで使ってきた `animateWithDuration:animations:completion:` をより設定項目のあるものに変更します。`animateWithDuration:delay:options:animations:completion:` はアニメーションを開始する前に delay を追加し、また `options` を設定できます。`delay` は秒単位の値を取り、`animations:` ブロックの開始までのオフセットとなります。
 
-`options` is a bit more complicated. It takes a bit-mask of integers, which are all prefixed with `UIViewAnimationOption`. You can perform such a bit-mask in Ruby like so: `(0 | 1 | 4) == 5`. The use case for this is if you want to combine multiple animation options at the same time, like a linear animation curve and automatic animation looping: `options: (UIViewAnimationOptionCurveLinear | UIViewAnimationOptionRepeat)`.
+`options` は少し複雑です。`UIViewAnimationOption` というプレフィックスの値で integer のビットマスクを取ります。`(0 | 1 | 4) == 5` のように Ruby でビットマスクを行うことができます。リニアなアニメーションカーブと自動的にアニメーションを繰り返すというような、同時に複数のアニメーションオプションを組み合わせたい場合に備えビットマスクになっています(`options: (UIViewAnimationOptionCurveLinear | UIViewAnimationOptionRepeat)`)。
 
-(there's also a less verbose form of the `UIView.animate...` function: `animateWithDuration:animations:`).
+(`UIView.animate...` でより設定項目が少ない `animateWithDuration:animations:` というものもあります)。
 
-Anyway, let's do this. Change the `animate_to_next_point` method to this:
+とにかく、動かしてみましょう。`animate_to_next_point` メソッドを次のように変更します。
 
 ```ruby
 def animate_to_next_point
@@ -104,17 +104,18 @@ def animate_to_next_point
 end
 ```
 
-`rake` and check out the new animation.
+`rake` を実行し、新しいアニメーションをチェックしましょう。
 
-It *looks* just like the old one, but its behavior is quite a bit different, no? We now have some time to breath between each new point and the sliding in between is much more mechanical.
+古くさいもののように見えますが、その動作はかなり異なっていますよね？ポイント間でいくらか時間がかかるようになり、スライドはよりメカニカルです。
 
 ## You Know This Section
 
-So that covers basic iOS animations. What all did we go over?
+iOS の基本的なアニメーションを扱ってきました。これまでどんなことをやってきましたか？
 
-- Animations work by changing views' properties in the `animations:` lambda of `animateWithDuration:animations:` and its variants
-- Animations are guided by "animation curves"; examples include UIViewAnimationOptionCurveLinear and UIViewAnimationOptionCurveEaseInOut
 
-[Do a barrel roll to our next chapter and learn about Models!](/7-models)
+- `animateWithDuration:animations:` と類似したものを使い、view のプロパティを `animations:` の lambda で変更することでアニメーションが動きました。
+- アニメーションカーブによってアニメーションの動作が決まります。`UIViewAnimationOptionCurveLinear` と `UIViewAnimationOptionCurveEaseInOut` を例として扱いました。
+
+[次の章ではモデルを学びます。いつやるか？今でしょう！](/7-models)
 
 [1]: http://developer.apple.com/library/ios/#documentation/uikit/reference/uiview_class/uiview/uiview.html#Overview_section
