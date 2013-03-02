@@ -26,23 +26,19 @@
     <link rel=stylesheet href='http://clayallsopp.github.com/rubymotion-tutorial/css/chapter.css'>
     
 
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-33404343-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
   </head>
 
   <body>
-    <a id="fork-me" href="https://github.com/clayallsopp/rubymotion-tutorial" target="_blank">Fork me on GitHub</a>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    <a id="fork-me" href="https://github.com/RubyMotionJP/rubymotion-tutorial" target="_blank">Fork me on GitHub</a>
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span2" id="derp">
@@ -102,7 +98,7 @@
             <ul class="nav nav-list">
               <li class="divider"></li>
               <li><a href="/">Home</a></li>
-              <li><a href="http://github.com/clayallsopp/rubymotion-tutorial">Source</a></li>
+              <li><a href="https://github.com/RubyMotionJP/rubymotion-tutorial">Source</a></li>
               <li class="divider"></li>
             </ul>
           </nav>
@@ -377,10 +373,10 @@
           <hr />
           <h2>Like it?<small id="spread"> Spread the word</small></h2>
           <div id="social">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://rubymotion-tutorial.com" data-text="RubyMotion Tutorial: Make iOS Apps With Ruby" data-size="large" data-related="clayallsopp" data-count="none">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://tutorial.rubymotion.jp" data-text="RubyMotion Tutorial: Make iOS Apps With Ruby" data-size="large" data-related="rubymotionjp" data-count="none">Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
-            <iframe id="facebook-like" src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Frubymotion-tutorial.com&amp;send=false&amp;layout=standard&amp;width=480&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=35&amp;appId=340990539314215" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <div class="fb-like" data-href="http://tutorial.rubymotion.jp/" data-send="true" data-width="450" data-show-faces="true"></div>
           </div>
           <hr />
         </div>
