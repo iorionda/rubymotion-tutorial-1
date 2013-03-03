@@ -158,7 +158,7 @@
 <p>これが何をしているのか詳しく見てみましょう。ボタンのタイトルとスタイルを指定して <code>UIBarButtonItem</code> を作成します。スタイルプロパティは、ボタンの見た目を決めます(枠線が無いボタン、枠線があるボタン、操作を「完了」するときなどに用いる青いボタン。違いを確認するために遊んでみてください)。次に、ボタンを コントローラの <code>navigationItem</code> の <code>rightBarButtonItem</code> へ設定します。すべての <code>UIViewController</code> には <code>navigationItem</code> があり、画面上部の青いバーで表示されている情報へアクセスするための手段となります。
 (注意: <code>UINavigationItem</code> は <code>UIView</code> ではありません！そのため、サブビューを追加することはできません)。</p>
 
-<p><code>target</code> と <code>action</code> の役割は何でしょう？えぇと、これは Ruby の世界へオリジナルの Objective-C SDK が漏れ出てきたものです(´д｀) ごく最近まで、Objecive-C で無名関数をコールバックとして渡すことができませんでした。その代替手段として、オブジェクトとオブジェクトから呼び出すメソッドの名前を API に渡しています。私たちはこの処理を Ruby でブロックとラムダで行いますが、悲しいことに古い iOS の API は古くささを示してます。</p>
+<p><code>target</code> と <code>action</code> の役割は何でしょう？えぇと、これは Ruby の世界へオリジナルの Objective-C SDK が漏れ出てきたものです(´д｀) ごく最近まで、Objecive-C で無名関数をコールバックとして渡すことができませんでした。その代替手段として、オブジェクトとオブジェクトから呼び出すメソッドの名前を API に渡しています。私たちはこの処理を Ruby でブロックと lambda で行いますが、悲しいことに古い iOS の API は古くささを示してます。</p>
 
 <p>それはさておき、<code>target</code> は <code>action</code> のメソッドを呼び出してもらいたいオブジェクトを指定します。より良いアイディアを得るために <code>TapController</code> へ <code>push</code> メソッドを実装してみましょう！</p>
 <div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="o">.</span><span class="n">.</span><span class="o">.</span>

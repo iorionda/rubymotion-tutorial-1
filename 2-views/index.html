@@ -143,11 +143,11 @@
 
 <p><strong>FULL DISCLOSURE</strong>: <code>UIWindow</code> に <code>UIView</code> を単独で直接追加することは一般的に良い考えではありませんが、勉強するためには良いことです。そのため、製品のコードではそれを行いません。</p>
 
-<p>アプリケーションを実行すると (<code>rake</code> を実行します。覚えてる？)、青い箱が見て取れます。</p>
+<p>アプリケーションを実行すると (<code>rake</code> を実行します。覚えてる？)、青いボックスが見て取れます。</p>
 
 <p><img src="images/1.png" alt="blue box"></p>
 
-<p>もっと箱を追加して、よりエキサイティングにしましょう！</p>
+<p>もっとボックスを追加して、よりエキサイティングにしましょう！</p>
 <div class="highlight"><pre class='codehilite'><code class="ruby syntax">  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
   <span class="vi">@blue_view</span> <span class="o">=</span> <span class="no">UIView</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
   <span class="vi">@blue_view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="no">UIColor</span><span class="o">.</span><span class="n">blueColor</span>

@@ -204,7 +204,7 @@
 
 <p>新しく登場した <code>accessibilityLabel</code> 以外は、ごく普通の <code>UIButton</code> パターンですね。</p>
 
-<p><code>accessibilityLabel</code> はそれぞれの <code>UIView</code> で利用できる文字列を扱うプロパティです。デバイスの VoiceOver 機能を利用する際にオペレーティングシステムによって読み上げられるテキストとして使用されます (それなので、余計なもので埋めないでください)。なぜ、今これを導入するのでしょう？ RubyMotion の機能テストは <code>accessibilityLabel</code> をもとに view を探します。メモリ上のどこかに存在するだけでなく、確実にテストする view が階層へ追加されます。</p>
+<p><code>accessibilityLabel</code> はそれぞれの <code>UIView</code> で利用できる文字列を扱うプロパティです。デバイスの VoiceOver 機能を利用する際にオペレーティングシステムによって読み上げられるテキストとして使用されます (それなので、余計なもので埋めないでください)。なぜ、今これを導入するのでしょう？ RubyMotion の機能テストは <code>accessibilityLabel</code> をもとにビューを探します。メモリ上のどこかに存在するだけでなく、確実にテストするビューが階層へ追加されます。</p>
 
 <p>最後に、<code>AppDelegate</code> でコントローラをウィンドウに接続する必要があります。</p>
 <div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span><span class="ss">:launchOptions</span><span class="p">)</span>
@@ -237,7 +237,7 @@
 
 <p><code>tests &lt;class&gt;</code> は <code>describe</code> と指定された <code>UIViewController</code> のクラスと結びつけます。これは、<code>UIWindow</code> とテストするコントローラをインスタンス化します。テスト内でウィンドウとコントローラのそれぞれ <code>self.window</code> と <code>self.controller</code> でアクセスすることができます。これはテストの手順を壊してしまうような、余計な UI やステートが無い状況を保証してくれます。</p>
 
-<p>コントローラをテストするために Spec を用意し、<code>it</code> ブロックであっサーションを行います。もう一つの新しいおもちゃは <code>tap</code> です。 <code>tap</code> は最初の引数として <code>UIView</code> のオブジェクト <em>か</em> <code>accessibilityLabel</code> の値を取ります。<code>UIButton</code> と <code>UILabel</code> ではデフォルトでそれらの <code>title</code> の値が <code>accessibilityLabel</code> として使用できます。テストでほとんどの view にアクセスできる方法についてはっきり示すために実装を見てきました。</p>
+<p>コントローラをテストするために Spec を用意し、<code>it</code> ブロックであっサーションを行います。もう一つの新しいおもちゃは <code>tap</code> です。 <code>tap</code> は最初の引数として <code>UIView</code> のオブジェクト <em>か</em> <code>accessibilityLabel</code> の値を取ります。<code>UIButton</code> と <code>UILabel</code> ではデフォルトでそれらの <code>title</code> の値が <code>accessibilityLabel</code> として使用できます。テストでほとんどのビューにアクセスできる方法についてはっきり示すために実装を見てきました。</p>
 
 <p><code>tap</code> の他にも、<code>flick</code>,  <code>drag</code>, <code>pinch_close</code>, <code>pinch_open</code>, そして <code>rotate</code> も使うことができます。それぞれについて、RubyMotion の <a href="http://rubymotion.jp/RubyMotionDocumentation/articles/testing/#_view_events">full documentation</a> で確認してみてください。</p>
 
@@ -257,7 +257,7 @@
 <li>テストは <code>describe</code> と <code>it</code> ブロックの集まりです。これらはラベルを引数に取り、同じようなテストをグループ分けするのに役に立ちます。</li>
 <li><code>&lt;any object&gt;.should</code> は値が等しいかチェックする際に用います。 例 : <code>greeting.should == &quot;hello&quot;</code></li>
 <li><code>UIViewController</code> には機能テストがあり、<code>tap</code> や <code>pinch</code> のようなイベントをシミュレートしてくれます。<code>describe</code> ブロックで、これらの機能を有効にするために <code>tests &lt;controller class&gt;</code> を用います。</li>
-<li><code>tap &lt;accessibility label&gt;</code> は、view に設定した <code>accessibilityLabel</code> プロパティを引数に設定し、<code>tap</code> をコードから実行します。</li>
+<li><code>tap &lt;accessibility label&gt;</code> は、ビューに設定した <code>accessibilityLabel</code> プロパティを引数に設定し、<code>tap</code> をコードから実行します。</li>
 </ul>
 
 <p><a href="/9-http">次の章は HTTP リクエストを実行する方法です！</a></p>

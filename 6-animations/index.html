@@ -111,7 +111,7 @@
 
 <p>さぁ、さっそくいくつか遊んでみましょう。画面の周りにボックスを移動させてみましょう。私を信じてください。コードは今述べた通りにシンプルです。</p>
 
-<p><code>window</code> に view を追加することから始め、そして設定したポイントの周辺でアニメーションします。これは比較的に短いので、ここで <code>AppDelegate</code> のすべての変更を破棄しましょう。</p>
+<p><code>window</code> にビューを追加することから始め、そして設定したポイントの周辺でアニメーションします。これは比較的に短いので、ここで <code>AppDelegate</code> のすべての変更を破棄しましょう。</p>
 <div class="highlight"><pre class='codehilite'><code class="ruby syntax"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span><span class="ss">:launchOptions</span><span class="p">)</span>
   <span class="vi">@window</span> <span class="o">=</span> <span class="no">UIWindow</span><span class="o">.</span><span class="n">alloc</span><span class="o">.</span><span class="n">initWithFrame</span><span class="p">(</span><span class="no">UIScreen</span><span class="o">.</span><span class="n">mainScreen</span><span class="o">.</span><span class="n">applicationFrame</span><span class="p">)</span>
   <span class="vi">@window</span><span class="o">.</span><span class="n">makeKeyAndVisible</span>
@@ -163,7 +163,7 @@
 
 <p><code>duration</code> にはアニメーションをどのくらい継続するかを秒単位で設定します。<code>1.85</code> のように float の値を使うこともできます。指にとって良いルールは &quot;素早い&quot; アニメーションは <code>.3</code> 秒にされることです。</p>
 
-<p><em>任意の</em> view に対して <code>animations:</code> の lambda で行った変更がスムーズにアニメーションされます。なんてクールなんでしょう！？Android と比較すると、Android では望むアニメーションのために各プロパティの独自の <code>Animation</code> オブジェクトを作成する必要があります。さて、いくつかのプロパティはアニメーションできませんが、<code>frame</code>, <code>bounds</code> や <code>alpha</code> といった一般的なものは問題なく動きます (完全なリスト <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/uiview_class/uiview/uiview.html#Overview_section">this</a> をチェックしてください)。私たちの場合では、<code>@view.frame</code> の値を <code>@points</code> で用意してある次の origin に設定します。</p>
+<p><em>任意の</em> ビューに対して <code>animations:</code> の lambda で行った変更がスムーズにアニメーションされます。なんてクールなんでしょう！？Android と比較すると、Android では望むアニメーションのために各プロパティの独自の <code>Animation</code> オブジェクトを作成する必要があります。さて、いくつかのプロパティはアニメーションできませんが、<code>frame</code>, <code>bounds</code> や <code>alpha</code> といった一般的なものは問題なく動きます (完全なリスト <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/uiview_class/uiview/uiview.html#Overview_section">this</a> をチェックしてください)。私たちの場合では、<code>@view.frame</code> の値を <code>@points</code> で用意してある次の origin に設定します。</p>
 
 <p>最後に、<code>completions:</code> はアニメーションが終了した後で呼び出されます。この lambda では <em>必ず</em> 引数を受け付ける必要があります。アニメーションが本当に終了したかを通知する <code>boolean</code> の値になります。他のアニメーションを明示的に行う場合にのみ、それによってアニメーションが取り消されるため、アニメーションは失敗となることがあります。</p>
 
@@ -207,7 +207,7 @@
 <p>iOS の基本的なアニメーションを扱ってきました。これまでどんなことをやってきましたか？</p>
 
 <ul>
-<li><code>animateWithDuration:animations:</code> と類似したものを使い、view のプロパティを <code>animations:</code> の lambda で変更することでアニメーションが動きました。</li>
+<li><code>animateWithDuration:animations:</code> と類似したものを使い、ビューのプロパティを <code>animations:</code> の lambda で変更することでアニメーションが動きました。</li>
 <li>アニメーションカーブによってアニメーションの動作が決まります。<code>UIViewAnimationOptionCurveLinear</code> と <code>UIViewAnimationOptionCurveEaseInOut</code> を例として扱いました。</li>
 </ul>
 
