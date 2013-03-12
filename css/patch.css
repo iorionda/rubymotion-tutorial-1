@@ -54,10 +54,9 @@ table#premium tbody tr:hover th {
   background-color: #e9e9e9;
 }
 
-#social .twitter-share-button {
-    position: relative;
-    top: -9px;
-    margin-right:15px;
+#social {
+    position: absolute;
+    height: 60px;
 }
 
 #social #facebook-like {
